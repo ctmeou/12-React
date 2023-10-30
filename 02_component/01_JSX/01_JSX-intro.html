@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!--추가1. JS문법을 사용하기 위해서 추가(표준 문법이 아니기 때문에)-->
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel"> //추가2. type설정 : text/babel을 type에 작성해줘야 JSX문법을 사용할 수 있다.
+        
+        const helloworld = <h1>Hello World!</h1>;
+
+        ReactDOM.createRoot(document.getElementById('root')).render(helloworld);
+        //ReactDOM이 가지고 있는 createRoot 메소드에 render함수를 호출해서 전달하는 내용을 렌더링하겠다.
+        
+    </script>
+</body>
+</html>
