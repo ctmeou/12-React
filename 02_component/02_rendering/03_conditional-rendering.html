@@ -21,13 +21,40 @@
         const positiveElement = <h1>앞으로 점점 더 재밌어질 거예요^_^</h1>;
         const negativeElement = <h1>천천히 앞의 내용을 복습해보세요^_^</h1>;
 
-        ReactDOM.createRoot(document.getElementById('root')).render(
-            (answer === 1) ?  positiveElement : negativeElement
-        );
+        // ReactDOM.createRoot(document.getElementById('root')).render(
+        //     (answer === 1) ?  positiveElement : negativeElement
+        // );
         //render함수에 positiveElement할 것인지 negativeElement할 것인지 조건부 렌더링
 
         /* 2. JSX 내에서 조건부로 엘리먼트 생성 */
-        
+        /* 2-1. if문 */
+        // let element;
+        // if (answer === 1) {
+        //     element = <h1>앞으로 점점 더 재밌어 질 거예요^_^</h1>;
+        // } else {
+        //     element = <h1>천천히 앞의 내용을 복습해보세요^_^</h1>;
+        // }
+
+        /* 2-2. 삼항 연산자 */
+        // const element = (answer === 1) ? (
+        //     <h1>앞으로 점점 더 재밌어 질 거예요^_^</h1>
+        // ) : (
+        //     <h1>천천히 앞의 내용을 복습해보세요1^_^</h1>
+        // );
+
+        /* 2-3. && 연산자를 이용한 조건부 엘리먼트 생성
+        특정 조건을 만족하는 경우에만 렌더링을 하고 그렇지 않은 경우 아무것도 보이지 않게 하고 싶은 경우에 사용한다. */
+        // const element = answer == 1 && <h1>앞으로 점점 더 재밌어질 거예요^_^</h1>;
+        //&& : 앞의 값이 true일 때 뒤의 값이 true/false 확인한다.
+
+        /* 주의 사항
+        false 조건을 가지고 렌더링을 하는 경우 조건에 일치하지 않으면 렌더링되는 요소가 없지만
+        0과 같이 falsy한 값을 이용해 조건부 엘리먼트 생성을 하면 0을 반환한다. */
+        const number = 0;
+        const element = number && <h1>0이 아닙니다</h1>;
+
+        ReactDOM.createRoot(document.getElementById('root')).render(element)
+
     </script>
 </body>
 </html>
