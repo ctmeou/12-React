@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02_function-type-component</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        
+        /* 함수형 컴포넌트
+        함수의 반환 값으로 리액트 엘리먼트 정의해서 반환한다. 일반적으로 JSX를 사용한다.
+        유의 사항은 반드시 앞글자를 대문자로 정의해야 한다는 것이다.
+        사용자 정의 엘리먼트 사용 시 </Title/>과 같은 형식으로 사용하는데
+        앞글자가 소문자이면 HTML로 인식하게 되고 존재하지 않는 HTML 태그 엘리먼트이기 때문에 에러가 발생한다.*/
+        function Title() {
+            return <h1>Function Component</h1>;
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<Title/>);
+        
+    </script>
+</body>
+</html>
