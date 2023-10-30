@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07_comment-in-JSX</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        
+        //일반적인 자바스크립트의 주석
+        // 한줄 주석
+        /* 여러 줄
+        주석 */
+
+        const element = (
+            <>
+                <h1>Comment in JSX</h1>
+                {/* JSX 내의 주석은 이렇게 작성합니다. */}
+                {/*중괄호를 이용해서 자바스크립트 형태를 만들고 안에서 주석을 이용할 수 있다.*/}
+                <h3
+                    id="text"                   // 시작 태그를 여러 줄로 작성한다면 여기에도 주석 작성 가능
+                    className="text"
+                >
+                    JSX 내의 주석 사용하는 방법
+                </h3>
+                // 이런 주석이나
+                /* 이런 주석은 페이지에 그대로 나타나게 됩니다. */
+            </>
+        );
+
+        ReactDOM.createRoot(document.getElementById('root')).render(element);
+
+    </script>
+</body>
+</html>

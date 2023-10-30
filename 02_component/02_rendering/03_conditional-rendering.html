@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03_conditional-rendering</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        
+        /* 조건부 렌더링 : 여러 개의 엘리먼트 중 특정 조건에 따라 하나의 엘리먼트만 렌더링할 수 있다. */
+        const answer = parseInt(prompt('리액트가 재미있으신가요?\n1.재미있다.\n2.어렵다.'));
+        /*prompt은 알럿창이 뜨는데 입력하는 창이 뜬다. */
+
+        /* 1. 렌더링 시 조건 비교 후 조건부 렌더링 */
+        const positiveElement = <h1>앞으로 점점 더 재밌어질 거예요^_^</h1>;
+        const negativeElement = <h1>천천히 앞의 내용을 복습해보세요^_^</h1>;
+
+        ReactDOM.createRoot(document.getElementById('root')).render(
+            (answer === 1) ?  positiveElement : negativeElement
+        );
+        //render함수에 positiveElement할 것인지 negativeElement할 것인지 조건부 렌더링
+
+        /* 2. JSX 내에서 조건부로 엘리먼트 생성 */
+        
+    </script>
+</body>
+</html>
