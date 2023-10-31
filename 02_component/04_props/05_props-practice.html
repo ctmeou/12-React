@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05_props-practice</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        /* 컴포넌트 합성
+        컴포넌트는 자신의 출력에 다른 컴포넌트를 참조할 수 있다.
+        컴포넌트는 재사용 가능한 크기로 작게 유지해야 하며, 순수 함수로 작성되어야 한다. */
+        
+        const user = {
+            name : '홍길동',
+            age : 20,
+            phone : '010-1234-5678',
+            email : 'hong123@gmail.com'
+        };
+
+        const user2 = {
+            name : '유관순',
+            age : 16,
+            phone : '010-9876-5432',
+            email : 'yoo123@gmail.com'
+        };
+
+        const user3 = {
+            name : '황주희',
+            age : 30,
+            phone : '010-2244-6688',
+            email : 'joohee@gmail.com'
+        };
+
+        function NameCard({ name }) {
+
+            return <h1>{ name }</h1>;
+
+        }
+
+        function AgeCard({ age }) {
+
+            return <h2 style={ { color : 'orangered' } }>{ age }</h2>;
+
+        }
+
+        function PhoneCard({ phone }) {
+
+            return <h2 style={ { color : 'red' } }>{ phone }</h2>;
+
+        }
+
+        function EmailCard({ email }) {
+
+            return <h2 style={ { backgroundColor : 'yellow' } }>{ email }</h2>;
+
+        }
+
+        function UserInfo({ user }) {
+
+            return (
+                <div style={ { width : 300, border : '1px solid black' } }>
+                    <NameCard name={ user.name }/>
+                    <AgeCard age={ user.age }/>
+                    <PhoneCard phone={ user.phone }/>
+                    <EmailCard email={ user.email }/>
+                </div>
+            );
+
+        }
+
+        //컴포넌트를 쪼개고 재사용하고 합성한다. -> props로 처리한다.
+        ReactDOM.createRoot(document.getElementById('root')).render(
+            [
+                <UserInfo user={ user }/>,
+                <UserInfo user={ user2 }/>,
+                <UserInfo user={ user3 }/>
+            ]
+        );
+        
+    </script>
+</body>
+</html>
