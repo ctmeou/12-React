@@ -16,6 +16,24 @@
         /* 여러 개의 input 태그 이벤트 다루기 */
         class LoginComponent extends React.Component {
 
+            state = {
+                username : '',
+                password : ''
+            };
+
+            onChangeHandler = (e) => {
+                /* 이벤트가 발생한 태그의 name 속성 값을 key 값으로 하여 변경할 state 객체를 생성한다.
+                동일한 key 값을 가진 state 객체만 업데이트 된다. */
+                this.setState({ [e.target.name] : e.target.value });
+                //자바스크립트에서 객체의 키 값은 기본적으로 string 문자이기 때문에 '' 구분을 안한다.
+                //하지만 특수문자를 입력 시에 'user#name' 감싸줘야 하고 obj.key나 obj['key'] 대괄호는 키 값에 특수문자가 들어가있거나 변수일 경우에 사용한다.
+            }
+
+            onClickHandler = (e) => {
+                alert(`username : ${ this.state.username }\npassword : ${ this.state.password }`);
+                this.setState({ username : '', password : '' }) //초기화
+            }
+
             render() {
                 return (
                     <div>
@@ -25,6 +43,8 @@
                             type="text"
                             name="username"
                             placeholder="아이디를 입력하세요"
+                            onChange={ this.onChangeHandler }
+                            value = { this.state.username }
                         />
                         <br/>
                         <label>비밀번호 : </label>
@@ -32,9 +52,15 @@
                             type="password"
                             name="password"
                             placeholder="비밀번호를 입력하세요"
+                            onChange={ this.onChangeHandler }
+                            value={ this.state.password }
                         />
                         <br/>
-                        <button>로그인</button>
+                        <button
+                            onClick={ this.onClickHandler }
+                        >
+                            로그인
+                        </button>
                     </div>
                 );
             }
