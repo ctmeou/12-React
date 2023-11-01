@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02_iteration-sample</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        
+        /* 리스트형 컴포넌트 사용 예시 */
+
+        //useState 사용하기 위해 선언(함수형 컴포넌트에서 state를 사용하는 방법)
+        const { useState } = React;
+
+        function App() {
+
+            //변화시키기 위해 setNames
+            const [names, setNames] = useState ([
+                { id : 1, name : '홍길동' },
+                { id : 2, name : '유관순' },
+                { id : 3, name : '이순신' }
+            ]);
+
+            //사용자 입력 양식을 관리할 state 선언
+            const [inputText, setInputText] = useState('');
+            //Id를 관리할 state 선언
+            const [nextId, setNextId] = useState(4);
+
+            //추가될 때 변화를 감지해 이벤트에서 state에 대한 값 변경을 호출하기 위해 onChangeHandler 선언
+            const onChangeHandler = e => setInputText(e.target.value);
+
+            const onClickHandler = () => {
+
+                //새로운 배열 생성         concat : 배열 병합(기존의 값에 새로운 값을 추가하기 위해)
+                const changedNames = names.concat({
+                    id : nextId,
+                    name : inputText
+                });
+
+                setNames(changedNames); //최종적으로 setNames를 호출하면서 기존의 값에 새로운 값을 추가해서 출력
+                setNextId(nextId + 1); //nextId 4는 이미 사용했기 때문에 증가한 번호를 입력해주기 위해 작성
+                setInputText(''); //사용자 입력 양식을 비운다.
+
+            }
+
+            const onRemove = id => {
+                //filter : id가 몇 번째에 있는지 확인하기 위한 메소드
+                const changedNames = names.filter(item => item.id !== id);
+                setNames(changedNames); //일치하지 않는 id만 배열에 남겨서 추가
+            };
+                                                                                        //삭제하기 위한 ID를 추가
+            const nameList = names.map(item => <li key={ item.id } onDoubleClick={ () => onRemove(item.id) }>{ item.name }</li>);
+
+            return(
+                <>
+                    <input type="text" value={ inputText } onChange={ onChangeHandler }/>
+                    <button onClick={ onClickHandler }>추가</button>
+                    <ul>{ nameList }</ul>
+                </>
+            );
+
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+    </script>
+</body>
+</html>
