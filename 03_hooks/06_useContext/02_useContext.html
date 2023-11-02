@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02_useContext</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        
+        .page {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .footer {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        /* useContext를 사용하여 화면 다크 모드 설정하는 예제 */
+
+        const { useState, createContext, useContext } = React;
+
+        /* context 객체 생성
+        인자로 defaultValue를 전달하며, 설정한 기본값이 없는 경우 null을 전달한다. */
+        //createContext 함수를 이용해 context를 생성
+        const DarkModeContext = createContext(null);
+
+        function Header() {
+
+            //Header에서 props를 받지 않고 context에서 가져와서 어떤 Context를 사용할지(useContext(DarkModeContext)) 작성
+            const context = useContext(DarkModeContext);
+            const { isDark } = context;
+
+            return (
+                <header
+                    className="header"
+                    style={
+                        {
+                            backgroundColor : isDark ? 'black' : 'lightgray',
+                            color : isDark ? 'white' : 'black'
+                        }
+                    }
+                >
+                    <h1>Welcome to Ohgiraffers World!</h1>
+                </header>
+            );
+
+        }
+
+        function Content() {
+
+            //props를 전달받지 않고 컨텍스트를 구독
+            //const context = useContext(DarkModeContext);
+            //const { isDark } = context;
+            const { isDark } = useContext(DarkModeContext); //한 줄로 작성 가능하다.
+
+            return (
+                <div
+                    className="content"
+                    style={
+                        {
+                            backgroundColor : isDark ? 'black' : 'white',
+                            color : isDark ? 'white' : 'black'
+                        }
+                    }
+                >
+                    <p>내용입니다.</p>
+                </div>
+            );
+
+        }
+
+        function Footer() {
+
+            const { isDark, setIsDark } = useContext(DarkModeContext);
+
+            return (
+                <footer
+                    className="footer"
+                    style={
+                        {
+                            backgroundColor : isDark ? 'black' : 'lightgray',
+                            color : isDark ? 'white' : 'black'
+                        }
+                    }
+                >
+                    <button //버튼 클릭 시 다크 모드와 라이트 모드 전환이 가능
+                        onClick={ () => setIsDark(!isDark) }
+                    >
+                        { isDark ? 'Light Mode' : 'Dark Mode' }
+                    </button>
+                    Copyright 2023. Ohgiraffers. all rights reserved.
+                </footer>
+            );
+
+        }
+
+                        //두 개의 props를 Page에서 받는다.
+        //function Page({ isDark, setIsDark }) { useContext를 사용하지 않기 때문에 전달하지 않는다.
+        function Page() {
+
+            return( //isDark로 보내 다크 모드인지 아닌지 확인한다.
+                <div className="page">
+                    <Header/>
+                    <Content/>
+                    <Footer/>
+                </div>
+            );
+
+        }
+
+        function App() {
+
+            //App에서 dark mode를 관리하고 false이기 때문에 처음에는 dark mode가 아니다.
+            const [isDark, setIsDark] = useState(false);
+
+            /* Provider는 context를 구독하고 있는 컴포넌트들에게 context의 변화를 알리는 역할을 한다.
+            Provider는 value prop을 이용하여 하위 컴포넌트들에게 값을 전달한다.
+            이 때 값을 전달받을 수 있는 컴포넌트 수에 제한은 없다.
+            prop 하위에서 context를 구독하는 모든 컴포넌트들은 value prop이 바뀔 때마다 다시 렌더링된다. */
+            //props로 전달한 것을 없애고 감싸줘야 한다.
+            //return <Page isDark={ isDark } setIsDark={ setIsDark }/>;
+            return (
+                <DarkModeContext.Provider value={ { isDark, setIsDark } }>
+                    <Page/>
+                </DarkModeContext.Provider>
+            );
+
+        }
+
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+    </script>
+</body>
+</html>
