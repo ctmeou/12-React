@@ -13,7 +13,7 @@
 
     <script type="text/babel">
 
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useMemo } = React;
         
         function App() {
 
@@ -22,7 +22,24 @@
 
             /* 원시 자료형 */
             //isKorea는 text 형태이기 때문에
-            const location = isKorea ? '한국' : '외국';
+            // const location = isKorea ? '한국' : '외국';
+
+            /* 객체 */
+            /* 객체의 경우 App이 호출될 때마다 지역 변수가 초기화되면서 매번 새로운 객체를 만들기 때문에 속성 값은 변경이 없더라도 매번 새로운 객체가 만들어지게 된다.
+            이 때 useEffect의 의존성 배열에 추가된 location은 매번 다른 값으로 인지하기 때문에 number를 변경하더라도 useEffect가 매번 호출되는 현상이 발생하게 된다. */
+            // const location = {
+            //     country : isKorea ? '한국' : '외국'
+            // };
+            //원시 자료형으로 작성했을 때는 의존성 배열에 대한 감지가 없었으나 의존성 배열에 대한 감지가 되었다.
+            //렌더링될 때마다 코드가 수행되는데 원시 자료형은 문자열로 비교하기 때문에 변화가 없다고 생각을 하고
+            //객체로 비교 시에는 새로운 객체를 반환하기 때문에 number가 바뀌어서 반환되어도 코드가 실행되기 때문에
+            //새로운 객체의 주소값을 가지게 되어 감지를 한다.(주소값 기반으로 생각하기 때문에, 객체는 새로 바뀔 때마다 새로운 주소 값을 갖기 때문)
+
+            /* useMemo를 활용하여 문제 해결 0000000000*/
+            const location = useMemo (
+                () => ({ country : isKorea ? '한국' : '외국'})
+                , [isKorea]
+            );
 
             /* location 값에 의존하는 useEffect */
             useEffect (
@@ -42,7 +59,8 @@
                     />
                     <hr/>
                     <h1>지금 당신이 있는 국가는?</h1>
-                    <p>국가 : { location }</p>
+                    {/*<p>국가 : { location }</p>*/}
+                    <p>국가 : { location.country }</p> {/*객체 안의 country이기 때문에 변경*/}
                     <button onClick={ () => setIsKorea(!isKorea) }>국가 토글하기</button> {/*버튼 클릭 시 값이 왔다갔다 하게 설정*/}
                 </>
             );

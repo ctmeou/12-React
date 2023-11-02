@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02_function-memorization</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        
+        //여러 개를 묶어보는 작업
+        
+        //useCallback : 사용해야 할 함수를 기억한다.
+        const { useState, useEffect, useCallback } = React;
+
+        function App() {
+
+            const [number, setNumber] = useState(0);
+            const [toggle, setToggle] = useState(false);
+            
+            /* 함수 생성이 불필요하게 계속될 때마다 useCallback을 이용하여 함수를 memorization해서 사용할 수 있다. */
+            const printNumber = useCallback(
+                () => { console.log(`current number : ${ number }`); }
+                , [number] //빈 배열일 경우 최초를 기억해두고 값을 변경하지 않는다.
+            );
+            /* 빈 배열로 생성할 경우 최초 로딩 시 한 번 함수를 수행하고 계속 사용하겠다는 의미 */
+
+            //number 변경 시에 함수 새로 생성해서 출력이 되고, toggle 변경 시에는 print 함수가 동작하지 않는다.
+            useEffect(
+                () => {
+                    console.log('printNumber 함수가 변경되었습니다.');
+                },
+                [printNumber]
+            );
+
+            return(
+                <>
+                    <input
+                        type="number"
+                        value={ number }
+                        onChange={ e => setNumber(e.target.value) }
+                    />
+                    <button
+                        onClick={ () => setToggle(!toggle) }
+                    >
+                        { toggle.toString() }
+                    </button>
+                    <button //함수 호출하게 설정
+                        onClick={ printNumber }
+                    >
+                        printNumberState
+                    </button>
+                </>
+            );
+
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+    </script>
+</body>
+</html>

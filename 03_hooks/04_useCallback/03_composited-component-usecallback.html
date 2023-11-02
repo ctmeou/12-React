@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03_composited-component-usecallback</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const { useState } = React;
+        
+        function App() {
+
+            const [size, setSize] = useState(200);
+            const [isDark, setIsDark] = useState(false);
+
+            return(
+                <>
+                    <div style={ { backgroundColor : isDark ? 'black' : 'white' } }>
+                        <input //사용자 입력 방식으로 범위를 받아 100 ~ 300를 입력할 수 있다.
+                            type="range"
+                            min="100"
+                            max="300"
+                            value={ size }
+                            onChange={ e => setSize(e.target.value) }
+                        />
+                        <button
+                            onClick={ () => setIsDark(!isDark) } //버튼 클릭 시 black과 white가 변화됨
+                        >
+                            { isDark.toString() } {/*버튼에도 isDark에 대한 문자를 출력하게 설정*/}
+                        </button>
+                        <Square/>
+                    </div>
+                </>
+            );
+
+        }
+
+        function Square() {
+
+            return (
+                <div></div>
+            );
+
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+    </script>
+</body>
+</html>
