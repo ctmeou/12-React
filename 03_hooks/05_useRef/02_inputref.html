@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02_inputref</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        
+        /* 사용자 입력 양식을 참조하는데도 useRef를 사용할 수 있다. */
+
+        function LoginComponent() {
+
+            const { useState, useRef, useEffect } = React;
+
+            const [form, setForm] = useState({
+                username : '',
+                password : ''
+            });
+
+            //useRef를 반환하면 객체가 반환이 되고, 초기값을 설정하면 초기값이 보여진다.
+            //설정하지 않으면 undefinded로 보여진다.
+            const usernameRef = useRef();
+            console.log(usernameRef);   // 최초 생성 시 렌더링 이전 동작이므로 undefinded로 초기화
+            
+            useEffect(
+                () => {
+                    console.log(useEffect);        // 초기 화면 렌더링 후 출력 확인
+                    usernameRef.current.focus();   // 사용자 입력 양식 포커스 설정
+                },
+                []   // 최초 마운트 시점에만 동작하도록 빈 배열 설정
+            );
+
+            const onChangeHandler = e =>{
+                setForm({
+                    ...form,
+                    [e.target.name] : e.target.value
+                });
+            }
+            
+            return (
+                <>
+                    <input
+                        type="text"
+                        name="username"
+                        value={ form.username }
+                        onChange={ onChangeHandler }
+                        ref={ usernameRef } //DOM에 직접 접근하는 것을 지양하라고 했기에 userRef 속성을 이용해서 focus 위치 설정을 할 수 있음
+                    />
+                    <br/>
+                    <input
+                        type="password"
+                        name="password"
+                        value={ form.password }
+                        onChange={ onChangeHandler }
+                    />
+                    <br/>
+                    <button>로그인</button>
+                </>
+            );
+
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<LoginComponent/>);
+
+    </script>
+</body>
+</html>

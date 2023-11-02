@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01_local-var-useref</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        /* 지역 변수(렌더링과 무관하게 변경될 수 있는 값) 사용 시 useRef의 활용 */
+
+        const { useState, useRef } = React;
+
+        function Counter() {
+
+            const [count, setCount] = useState(0); //count는 useState에 선언
+            let variable = 0; //지역변수
+            //코드는 렌더링될 때마다 초기화되기 때문에 렌더링 시 초기화가 된다.
+            //-> state로 관리되는 것만 유지되고 지역변수에 관해서는 초기화가 된다. -> useRef로 해결
+            const countRef = useRef(0); //countRef는 객체이고 원하는 값을 가지고 있다.
+            console.log('countRef :', countRef);
+
+            console.log('Counter 렌더링...');
+
+            const increaseCount = () => setCount(count + 1);
+            const increaseVariable = () => {
+                variable += 1;
+                console.log(`variable : ${ variable }`);
+            }
+            const increaseCountRef = () => {
+                countRef.current = countRef.current + 1;
+                console.log(`countRef.current : ${ countRef.current }`);
+            }
+
+            return (
+                <>
+                    <h1>count : { count }</h1>
+                    <h1>variable : { variable }</h1>
+                    <h1>countRef.current : { countRef.current }</h1>
+                    <button onClick={ increaseCount }>count 증가</button>
+                    <button onClick={ increaseVariable }>variable 증가</button>
+                    <button onClick= {increaseCountRef }>countRef 증가</button>
+                </>
+            );
+
+        }
+        
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<Counter/>);
+
+    </script>
+</body>
+</html>
