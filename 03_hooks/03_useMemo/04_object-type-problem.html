@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04_object-type-problem</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const { useState, useEffect } = React;
+        
+        function App() {
+
+            const [number, setNumber] = useState(0);
+            const [isKorea, setIsKorea] = useState(true);
+
+            /* 원시 자료형 */
+            //isKorea는 text 형태이기 때문에
+            const location = isKorea ? '한국' : '외국';
+
+            /* location 값에 의존하는 useEffect */
+            useEffect (
+                () => {
+                    console.log('useEffect 호출됨...'); //숫자가 변할 때는 호출이 안됨
+                },
+                [location]
+            )
+
+            return (
+                <>
+                    <h1>좋아하는 숫자를 입력해주세요.</h1>
+                    <input
+                        type="number"
+                        value={ number }
+                        onChange={ e => setNumber(e.target.value) }
+                    />
+                    <hr/>
+                    <h1>지금 당신이 있는 국가는?</h1>
+                    <p>국가 : { location }</p>
+                    <button onClick={ () => setIsKorea(!isKorea) }>국가 토글하기</button> {/*버튼 클릭 시 값이 왔다갔다 하게 설정*/}
+                </>
+            );
+            
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+    </script>
+</body>
+</html>

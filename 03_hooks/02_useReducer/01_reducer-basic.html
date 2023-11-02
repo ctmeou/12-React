@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01_reducer-basic</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        /* useReducer는 다양한 컴포넌트의 state를 업데이트할 때 사용하는 Hook으로 사용 시의 장점은
+        컴포넌트 업데이트 로직을 컴포넌트 밖으로 분리할 수 있다는 것이다. */
+        //Reducer 사용 목적 : 업데이트 시 분리해서 사용할 수 있기 때문
+
+        //React 안에 있는 useReducer를 꺼내서 사용하기 위해 선언
+        const { useReducer } = React;
+
+        /* 리듀서 함수의 첫 번째 인자는 기존 상태 값, 두 번째 인자는 업데이트를 위해 필요한 정보를 담은 객체를 전달받는다. */
+        //컴포넌트와 분리된 업데이트와 관련된 정보를 다룬 객체
+        function reducer(state, action) { //아래 dispatcher type을 요청하면 전달이 된다.
+
+            /* action에 전달된 타입에 따라 새로운 state를 갱신할 객체를 생성해서 리턴한다.
+            기존의 state를 변경하는 것이 아니라 새롭게 생성된 객체를 사용해야 한다. */
+            switch(action.type) { //전달받는 동작의 타입에 따라 할일이 나눠진다.
+
+                case 'INCREMENT' :  // 증가 동작
+                    return { value : state.value + 1 };
+                case 'DECREMENT' :  // 감소 동작
+                    return { value : state.value - 1 };
+                deault :            // 아무 타입도 해당하지 않을 경우
+                    return state; //바꾸지 않을 경우 기존 state의 값으로 유지한다.
+            }
+
+        }
+        
+        //실제로 사용하는 방법은 컴포넌트 내에서 작성
+        function Counter() {
+
+            /* useReducer의 첫 번째 인자는 업데이트 로직을 작성한 리듀서 함수이고,
+            두 번째 인자는 state로 사용할 기본값을 전달한다.
+            state는 현재 상태이고, dispatcher는 state를 변경하고자 할 때 호출할 함수이다. */
+            //state에 대한 변경에 대한 로직이 다양할 경우 이렇게 작성하면 되고, 간단할 경우 useReducer가 아닌 useState를 사용하면 된다.
+            //useReducer를 사용할 경우 dispatcher를 이용해서 사용한다.
+            const [state, dispatcher] = useReducer(reducer, { value : 0 });
+            //useReducer를 호출하고 두 개의 인자를 넘김
+
+            /* state를 변경하고자 할 때는 dispatcher 함수에 action 객체를 전달하면서 호출한다. */
+            //위에 action에 따라 동작을 나눴기 때문에
+            return(
+                <>
+                    <h1>count : { state.value }</h1> {/*{ state.value } 작성해야 초기값 0이 나온다.*/}
+                    <button onClick={ () => dispatcher({ type : 'DECREMENT' }) }>-1</button>
+                    <button onClick={ () => dispatcher({ type : 'INCREMENT' }) }>+1</button>
+                </>
+            );
+
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<Counter/>);
+
+    </script>
+</body>
+</html>
