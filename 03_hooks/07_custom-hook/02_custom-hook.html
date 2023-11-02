@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02_custom-hook</title>
+    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
+    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'></script>
+    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        /* 여러 컴포넌트에서 비슷한 기능을 공유할 경우, 사용자 정의 custom hook을 작성하여 로직을 재사용할 수 있다. */
+        //사용자 입력 방식에 따라 작성할 수 있게 짜여져있다.
+
+        const { useState } = React;
+
+        //custom hook function
+        function useInput() {
+
+            //동작을 패턴화해서 변수명은 value로 명시
+            const [value, setValue] = useState('');
+            const onChange = e => setValue(e.target.value);
+
+            return { value, onChange }; //value 값을 변경하기 위한 onChange 함수 사용, 객체로 반환
+
+        }
+
+        function App() {
+
+            //하나의 값을 관리하는 value 속성, 그것을 변경할 function을 객체로 반환받는다.
+            const username = useInput();
+            const password = useInput();
+            const email = useInput();
+
+            //무엇을 반환 받는지 확인하기 위한 출력
+            console.log(username);
+            console.log(password);
+            console.log(email);
+            
+            return (
+                <div>
+                    <label>이름 : </label>
+                    <input type="text" id="username" value={ username.value } onChange={ username.onChange }/>    
+                    <br/>     
+                <label>비밀번호 : </label>          {/*스프레드 문법으로도 작성이 가능하다.*/}
+                    <input type="password" id="password" { ...password }/>
+                    <br/>
+                    <label>이메일 : </label>
+                    <input type="email" id="email" { ...email }/>
+                    <br/>
+                    <h4>usename : { username.value }</h4>
+                    <h4>password : { password.value }</h4>
+                    <h4>email : { email.value }</h4>
+                </div>
+            );
+
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+    </script>
+    
+</body>
+</html>
