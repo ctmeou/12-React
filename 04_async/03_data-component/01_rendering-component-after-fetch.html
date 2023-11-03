@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01_rendering-component-after-fetch</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        .item {
+            background-color: powderblue;
+            border: 1px dotted black;
+            width: 350px;
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const { useState, useEffect } = React;
+
+        function Title() {
+            
+            return <h1>회원 목록</h1>;
+
+        }
+
+        //컴포넌트를 쪼개기 위해 item List랑 분리해서 작성
+        function Item({ user }) {
+
+            return (
+                <div className="item">
+                    <h4>{ user.name } ({ user.username })</h4> {/*({ user.username })에서 소괄호는 문자로서의 소괄호*/}
+                    <p>
+                        userId : { user.id } <br/>
+                        email : { user.email } <br/>
+                        phone : { user.phone } <br/>
+                        company name : { user.company.name }
+                    </p>
+                </div>
+            );
+
+        }
+
+        function ItemList() {
+
+            /* 페이지 로드 하자마자 데이터를 보여줘야 하는 상황이라면 useEffect()에서 호출하고
+            두 번째 인자로는 빈 배열을 전달한다.(componentiDidMount와 같은 타이밍)
+            그러면 최초 렌더링 시 데이터를 로드할 수 있다.(어떠한 동작에 의해 데이터를 보여주고 싶다면 이벤트 핸들러에서 요청한다.) */
+
+            /* state를 어떤 컴포넌트에서 관리해야 하는지에 대해 고려해서 선언한다.
+            App에서 관리할 경우 props에 전달할 수 있기는 하지만 수정이 생길 경우 App 단위로 리렌더링되므로 비효율적이다. */
+
+            const [users, setUsers] = useState();
+
+            //componentiDidMount 시점에서 호출
+            useEffect(
+                () => {
+                    fetch('https://jsonplaceholder.typicode.com/users')
+                        .then(response => response.json()) //응답 객체를 json 형태로 꺼낸다.
+                        .then(reponseUser => setUsers(reponseUser)) //화면에 렌더링하려면 state에 배열을 선언하고 통신을 받는다.
+                },
+                []
+            )
+
+            //렌더 시점에서 호출
+            //최초에는 렌더링 시점에 값이 없어 반환되고 네트워크 통신 후 setState한 경우 값이 존재하기 때문에 렌더링이 가능하다.
+            /* ⭐ 최초 render 시에는 users가 undefined이므로 map 메소드 호출 시 오류가 발생한다.
+            조건부 렌더링을 통해 users가 존재할 경우 렌더링하도록 변경하면
+            API 호출을 통해 users 데이터가 존재하게 되었을 경우 렌더링이 처리된다.*/
+            return (
+                <div>
+                    { users && users.map(user => <Item key={ user.id } user={ user }/>) } {/*/ietm 컴포넌트를 반복적으로 출력, 반복적으로 출력 시 key 값 설정되어야 한다.*/}
+                </div>
+            );
+
+        }
+
+        function App() {
+
+            return (
+                <>
+                    <Title/>
+                    <ItemList/>
+                </>
+            );
+
+        }
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+    </script>
+</body>
+</html>
