@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02_callback-function</title>
+</head>
+<body>
+    <script>
+        
+        /* 비동기 처리를 하기 위한 가장 흔한 방법을 콜백 함수를 이용하는 것이다.
+        특정 비동기 처리 후 수행해야 할 내용을 또 정의해야 하는 경우가 많은데 이런 경우
+        콜백 함수의 중첩이 생기고 중첩이 ㅁ낳아지면 콜백 지옥이 생길 수 있다. */
+
+        function increase(number, callback) {
+
+            setTimeout(
+                () => {
+                    const result = number + 10;
+
+                    if (callback) {
+                        callback(result);
+                    }
+                },
+                1000
+            );
+            
+        }
+
+        console.log('start');
+        increase(0, result => {  //첫 번째 인자 number, 두 번째 인자 콜백함수
+            console.log(result)
+            increase(result, result => { //한 번의 증가가 일어난 후 또 한 번의 증가가 일어난다.
+                console.log(result);
+                increase(result, result => { //두 번의 증가가 일어난 후 또 한 번의 증가가 일어난다.
+                    console.log(result);
+                    increase(result, result => {
+                        console.log(result);
+                        increase(result, result => {
+                            console.log(result); //구조가 난해하고 코드가 해석하기 힘들다 -> 콜백지옥
+                            console.log('end!!');
+                        });
+                    });
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
