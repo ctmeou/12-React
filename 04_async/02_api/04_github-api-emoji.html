@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04_github-api-emoji</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const { useState } = React;
+
+        function SearchBox({ setImgUrl }) { //검색하는 컴포넌트
+
+            const [emojiName, setEmojiName] = useState('');
+
+            const onClickHandler = () => {
+                axios.get('https://api.github.com/emojis') //get 방식으로 요청을 하면서 이미지 목록이 반환된다.
+                    .then(res => setImgUrl(res.data[emojiName])); //emojiNmae의 키 값을 입력하면 setImgUrl에 value 값 설정
+            }
+
+            return (
+                <>
+                    <input
+                        type="search"
+                        name="emojiName"
+                        value={ emojiName }
+                        onChange={ e => setEmojiName(e.target.value) }
+                    />
+                    <button onClick={ onClickHandler }>검색</button>
+                </>
+            );
+
+        }
+
+        function ImageBox({ imgUrl }) { //결과가 뜨는 컴포넌트
+
+            //이미지 렌더링(이미지가 존재해야 하기 때문에 조건부 렌더링을 사용)
+            return(
+                imgUrl && <img src={ imgUrl } width="200" height="200"/> //이미지가 존재 시에 src 속성을 가진 img를 렌더링하겠다.
+            );
+            
+        }
+        
+        function App() {
+
+            const [imgUrl, setImgUrl] = useState('');
+
+            return(
+                <>  {/*searchBox와 imageBox 합성*/}
+                    <SearchBox setImgUrl={ setImgUrl }/> {/*setImgUrl 필요*/}
+                    <br/>
+                    <ImageBox imgUrl={ imgUrl }/> {/*imgUrl 필요*/}
+                </>
+            );
+            
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+    </script>
+</body>
+</html>
