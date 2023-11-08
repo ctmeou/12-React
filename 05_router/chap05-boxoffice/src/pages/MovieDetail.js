@@ -24,7 +24,7 @@ function MovieDetail() {
                     <h1>{ movie.movieNm }({ movie.movieNmEn })</h1>
                     <div>러닝 타임 : { movie.showTm }분</div>
                     <div>
-                        국가 : { movie.nations.map(nation => <span>{ nation.nationNm }</span>)}
+                        국가 : { movie.nations.map(nation => <span>{ nation.nationNm }</span>) }
                     </div>
                     <div>출연</div>
                     <div>

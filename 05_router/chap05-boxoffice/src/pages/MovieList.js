@@ -16,7 +16,7 @@ function MovieList() {
     //movieList 처음에는 undifined, 배열로 돌아왔을 때 하나하나 MovieItem로 표현하고 props로 moive로 준다.
     return (
         <div className="content-row">
-            { movieList && movieList.map(movie => <MovieItem key={ movie.movieCd } movie={ movie }/>)}
+            { movieList && movieList.map(movie => <MovieItem key={ movie.movieCd } movie={ movie }/>) }
         </div>
     );
 
