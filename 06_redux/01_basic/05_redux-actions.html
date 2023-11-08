@@ -15,23 +15,24 @@
 
     <script type="text/babel">
         //04에서는 리터럴하게 사용하지 않고 분리해서 재사용성을 늘려서 함수로 사용했고, 05에서는 redux actions을 이용하여 조금 더 간결하게 사용해본다.
+        //action이나 리듀서가 여러 가지 타입일 경우 const { createAction, createActions, handleActions } = ReduxActions; 문법을 이용하여 간결하게 사용
 
         const { createStore } = Redux;
         const { Provider, useSelector, useDispatch } = ReactRedux;
 
         /* action에 해당하는 내용을 매번 함수로 정의하기 번거롭다.
-        redux-actions 모듈에서 제공하는 createAction / createActions 기능을 이용하면 보다 쉽게 액션 함수를 정의할 수 있다. */
-        const { createAction, createActions } = ReduxActions;
+        redux-actions 모듈에서 제공하는 createAction / createActions 기능을 이용하면 보다 쉽게 액션 함수를 정의할 수 있다.
+        handleActions 기능을 이용하면 리듀서 함수를 정의할 수 있다. */
+        const { createAction, createActions, handleActions } = ReduxActions;
 
         /* 초기값 */
         const initialState = 0;
 
         /* 액션 */
         //상수로 미리 정의한다.
-
         /* 액션 타입을 상수로 정의한다. 접두사는 다른 모듈과 액션 값이 겹쳐지지 않게 위함이다. */
-        const INCREMENT = 'count/INCREMENT';
-        const DECREMENT = 'count/DECREMENT';
+        const INCREMENT = 'count/INCREASE'; //count는 작성하지 않아도 되나 분리하는 용도로 사용한다.
+        const DECREMENT = 'count/DECREASE';
 
         /* 1. createAction 함수 사용
         첫 번째 인자로 전달되는 문자열은 action type의 속성이 된다.
@@ -43,27 +44,33 @@
         // const increase = createAction(INCREMENT, (amount = 1) => ({ incrementValue : amount }));
         // const decrease = createAction(DECREMENT, (amount = 1) => ({ decrementValue : amount }));
 
-        /* 2. createActions 함수 이용 */
-        //increase와 decrease를 합쳐본다.
-        createActions({
+        /* 2. createActions 함수 이용
+        여러 개의 action 함수를 한 번에 생성할 수 있다.
+        접두사가 있으므로 대괄호를 이용해서 키 식별자를 작성한다.
+        전달하는 객체의 key 값이 action의 type 속성이 되고, value 값의 함수 반환 값이 payload가 된다.
+        action type 속성 값에 따라 반환되는 객체의 키 값이 설정된다. EX) actions.count.increase */
+        //createActions를 이용해서 increase와 decrease를 합쳐 하나의 함수로 만들어본다.
+        //각각의 함수를 꺼내기 위해 구조 분해 할당
+        const { count : { increase, decrease }} = createActions({
             [INCREMENT] : (amount = 1) => ({ incrementValue : amount }),
             [DECREMENT] : (amount = 1) => ({ decrementValue : amount })
         });
 
         /* 리듀서 */
-        //리듀서에서도 정의된 상수 값을 사용한다.
-        function reducer(state = initialState, { type, payload }) {
-
-            switch(type) {
-                case INCREMENT :
-                    return state + payload.incrementValue;
-                case DECREMENT :
-                    return state - payload.decrementValue;
-                default :
-                    return state;
+        /* 3. handleActions 사용
+        첫 번째 인자는 객체로 key에는 type, value에는 함수를 전달한다.
+        해당 함수의 인자로 state, action이 전달되며 반환 값이 변경될 state 값이다.
+        두 번째 인자는 초기 값을 전달한다. */
+        //리듀서를 한 번에 만드는 것이 목적, key 값은 action의 타입에 맞춘다.
+        //action에서 incrementValue와, decrementValue를 사용하기 위해 중첩 구조 분해 할당을 해, 꺼내서 사용한다.
+        const reducer = handleActions({
+            [INCREMENT] : (state, { payload : { incrementValue } }) => {
+                return state + incrementValue; //전달된 원래의 state에 incrementValue를 더해서 sate 값을 변경한다.
+            },
+            [DECREMENT] : (state, { payload : { decrementValue } }) => {
+                return state + decrementValue;
             }
-
-        }
+        }, initialState); //관리하고자 하는 초기 값 설정
 
         /* -------------------------------------------------------------------------------------------------- */
 
