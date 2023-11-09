@@ -4,6 +4,7 @@ import Layout from "./layouts/Layout";
 import Main from "./pages/Main";
 import Menus from "./pages/Menus";
 import MenuDetail from "./pages/MenuDetail";
+import Login from "./pages/Login";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
                   <Route index element={ <Menus/> }/>
                   <Route path=":id" element={ <MenuDetail/> }/>
               </Route>
+              <Route path="login" element={ <Login/> }/>
           </Route>
         </Routes>
       </BrowserRouter>

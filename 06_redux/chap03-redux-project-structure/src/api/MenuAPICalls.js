@@ -1,5 +1,5 @@
 import {request} from "./Api";
-import {getMenulist} from "../modules/MenuModules";
+import {getMenu, getMenulist} from "../modules/MenuModules";
 
 //메뉴 API와 관련된 것을 모아둠
 export function callGetMenuListAPI() {
@@ -28,6 +28,8 @@ export function callGetMenuAPI(id) { //id를 받아와서 넘긴다.
         const result = await request('GET', `/menu/${ id }`);
 
         console.log("getMenu result : ", result);
+
+        dispatch(getMenu(result)); //menuModules에서 getMenu 받아옴, action 객체를 만들어서 저장(저장 어떻게 할 건지 리듀서에 정의(Menu Modules))
 
     }
 
