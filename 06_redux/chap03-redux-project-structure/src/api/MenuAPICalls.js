@@ -19,3 +19,16 @@ export function callGetMenuListAPI() {
     }
 
 }
+
+export function callGetMenuAPI(id) { //id를 받아와서 넘긴다.
+
+    return async (dispatch, getState) => {
+
+        //get방식이고, menu 뒤에 url을 붙인다. -> id 값이 넘어와야 한다.
+        const result = await request('GET', `/menu/${ id }`);
+
+        console.log("getMenu result : ", result);
+
+    }
+
+}

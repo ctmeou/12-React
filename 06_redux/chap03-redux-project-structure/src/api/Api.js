@@ -10,7 +10,7 @@ export const request = async (method, url, data) => {
     //axios 안의 객체를 보낸다(GET, POST, PUT, DELETE)
     //장점 : 자동으로 JSON 파싱
     return await axios({
-        method,
+        method, //get방식인지 post방식인지
         url : `${ DOMAIN }${ url }`,
         data
     })
