@@ -1,5 +1,6 @@
 import {request} from "./Api";
-import login from "../pages/Login";
+import {login} from "../modules/UserModules";
+
 
 export function callLoginAPI(loginInfo) { //전달 loginInfo
 
@@ -17,6 +18,8 @@ export function callLoginAPI(loginInfo) { //전달 loginInfo
         );
 
         console.log('login result : ', result); //일치하면 반환 값이 나와야 하고 틀리면 반환 값이 없어야 한다.(undifined)
+
+        dispatch(login(result)); //login하면 일치하는 객체가 전달되었다.
 
     }
 
